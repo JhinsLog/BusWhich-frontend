@@ -1,0 +1,147 @@
+/* 기본 리셋 */
+* {
+    box-sizing: border-box; /* 모든 요소에 padding과 border를 너비/높이에 포함 */
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif; /* 기본 글꼴 설정 */
+}
+
+/* HTML, body, map 요소 기본 높이 설정 */
+html, body, #map {
+    height: 100%;
+    width: 100%; /* #map 에 width 추가 */
+}
+
+/* --- 지도 관련 스타일 --- */
+#map {
+    /* width: 100%; 이미 위에서 html, body, #map 에 적용 */
+    /* height: 100vh; 위에서 height: 100%로 적용, 100vh도 유효하나 일관성 위해 100% 유지 */
+}
+
+/* --- 하단 정보 카드 스타일 --- */
+#bus-info {
+    position: fixed; /* 화면 하단에 고정 */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff; /* 배경색 흰색 */
+    padding: 12px 16px; /* 내부 여백 */
+    border-top-left-radius: 16px; /* 좌상단 모서리 둥글게 */
+    border-top-right-radius: 16px; /* 우상단 모서리 둥글게 */
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1); /* 상단 그림자 효과 */
+    transition: transform 0.3s ease; /* 부드러운 변환 효과 */
+    z-index: 10; /* 쌓임 순서 (네비게이션 바보다 아래) */
+}
+
+/* 정보 카드가 접혔을 때 (JavaScript로 .collapsed 클래스 추가/제거) */
+#bus-info.collapsed {
+    /* 카드의 핸들 부분(약 40px 가정)만 남기고 숨김. 핸들 높이에 따라 값 조절 필요 */
+    transform: translateY(calc(100% - 40px));
+    /* 완전히 숨기려면: transform: translateY(100%); */
+}
+
+/* 드래그 핸들 (정보 카드 상단) */
+.drag-handle {
+    width: 40px;
+    height: 5px;
+    background: #ccc; /* 핸들 배경색 */
+    border-radius: 3px; /* 핸들 모서리 둥글게 */
+    margin: 8px auto; /* 위아래 여백 및 가로 중앙 정렬 */
+    cursor: grab; /* 드래그 가능한 커서 모양 (실제 드래그 기능 구현 시) */
+}
+
+/* 버스 정보 한 줄 (행) */
+.bus-row {
+    display: flex; /* Flexbox 레이아웃 사용 */
+    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: space-between; /* 양쪽 끝으로 요소 분산 배치 */
+    padding: 8px 0; /* 위아래 내부 여백 */
+    border-bottom: 1px solid #eee; /* 각 행 아래 구분선 */
+}
+
+.bus-row:last-child {
+    border-bottom: none; /* 마지막 행의 구분선은 제거 */
+}
+
+/* 버스 번호 박스 */
+.bus-number {
+    width: 50px; /* 고정 너비 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    font-weight: bold; /* 글자 굵게 */
+    color: #fff; /* 글자색 흰색 */
+    padding: 4px 6px; /* 내부 여백 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    font-size: 14px; /* 글자 크기 */
+    flex-shrink: 0; /* 내용이 길어져도 줄어들지 않도록 설정 */
+}
+
+/* 버스 번호 색상 (노선 종류별) */
+.bus-number.green {
+    background-color: #3cb043; /* 초록색 */
+}
+.bus-number.yellow {
+    background-color: #f1c40f; /* 노란색 */
+}
+.bus-number.red {
+    background-color: #e74c3c; /* 빨간색 */
+}
+
+/* 버스 아이콘 */
+.bus-icon {
+    width: 32px; /* 아이콘 너비 */
+    height: auto; /* 높이는 비율에 맞게 자동 조절 */
+    margin: 0 8px; /* 좌우 여백 */
+    flex-shrink: 0;
+}
+
+/* 혼잡도 텍스트 */
+.crowd {
+    flex: 1; /* 남은 공간을 모두 차지하도록 설정 */
+    font-size: 14px; /* 글자 크기 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    color: #444; /* 글자색 */
+    margin: 0 8px; /* 좌우 여백 */
+    overflow: hidden; /* 내용이 넘칠 경우 숨김 */
+    text-overflow: ellipsis; /* 내용이 넘칠 경우 말줄임표(...) 표시 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+/* 도착 예정 시간 */
+.time {
+    font-size: 13px; /* 글자 크기 */
+    color: #555; /* 글자색 */
+    flex-shrink: 0;
+}
+
+/* --- 하단 네비게이션 메뉴바 --- */
+.bottom-nav {
+    position: fixed; /* 화면 하단에 고정 */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px; /* 높이 */
+    background: #f8f8f8; /* 배경색 일관성 유지 (기존 index.html의 #f4f4f4 대신 사용) */
+    border-top: 1px solid #ddd; /* 상단 테두리 일관성 유지 (기존 index.html의 #ccc 대신 사용) */
+    display: flex; /* Flexbox 레이아웃 */
+    justify-content: space-around; /* 아이템들을 균등하게 배치 */
+    align-items: center; /* 아이템들을 수직 중앙 정렬 */
+    z-index: 20; /* 쌓임 순서 (정보 카드보다 위) */
+}
+
+/* 네비게이션 아이템 (버튼) */
+.nav-item {
+    border: none; /* 테두리 없음 */
+    background: none; /* 배경 없음 */
+    font-size: 14px; /* 글자 크기 일관성 유지 (기존 index.html의 16px 대신 사용) */
+    color: #444; /* 기본 글자색 */
+    padding: 10px 15px; /* 클릭 영역 확보를 위한 내부 여백 */
+    cursor: pointer; /* 마우스 오버 시 포인터 모양 */
+    flex-grow: 1; /* 가능한 공간을 균등하게 차지 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+/* 활성화된 네비게이션 아이템 */
+.nav-item.active {
+    color: #007bff; /* 활성 상태 글자색 (파란색 계열) */
+    font-weight: bold; /* 글자 굵게 */
+}
